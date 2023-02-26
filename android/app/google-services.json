@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "346152864603",
+    "project_id": "airduino-2223",
+    "storage_bucket": "airduino-2223.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:346152864603:android:aeb1e614e1ba9557d9687e",
+        "android_client_info": {
+          "package_name": "com.example.airduino"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "346152864603-mqr8grng059hrd4doigp67mpva2b7ukn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkStdNFUTo4SMUsZ7PBzrBNiCWIPT_6-c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "346152864603-mqr8grng059hrd4doigp67mpva2b7ukn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
