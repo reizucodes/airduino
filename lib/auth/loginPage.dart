@@ -1,25 +1,20 @@
 // ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, camel_case_types, file_names, unused_import, prefer_const_literals_to_create_immutables, unused_field, use_build_context_synchronously, depend_on_referenced_packages
+import 'dart:convert';
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import '../main.dart';
-import 'dart:convert';
-import '../frontPage.dart';
-import './registerPage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../dashboard/mainDashboard.dart';
-import 'package:crypto/crypto.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import './registerPage.dart';
+import '../main.dart';
+import '../frontPage.dart';
+import '../dashboard/mainDashboard.dart';
 
 class loginPage extends StatefulWidget {
   @override
   loginPageState createState() => loginPageState();
 }
-
-//bool _isLoggedIn = false;
-//ThingSpeak API url - read channel
-//final String url =
-//    'https://api.thingspeak.com/channels/2020581/feeds.json?api_key=8PB79WZM217WORJ9';
 
 //login Page logic
 class loginPageState extends State<loginPage> {
@@ -29,7 +24,9 @@ class loginPageState extends State<loginPage> {
 //controller for user input
   final _email = TextEditingController();
   final _pass = TextEditingController();
-
+  //isLoggedIn variables
+  late SharedPreferences loginData;
+  late bool newUser;
   //clear LoginCache function to reset login
   Future<void> clearLoginCache() async {
     final prefs = await SharedPreferences.getInstance();
@@ -78,8 +75,18 @@ class loginPageState extends State<loginPage> {
       user.get().then(
         (DocumentSnapshot doc) async {
           final data = doc.data() as Map<String, dynamic>;
-          //if correct email and password input
+          //if correct email and password input, then;
+          //go to dashboard
           if (hashed == data['password']) {
+            //user will be set as currently logged in
+            loginData.setBool('login', false);
+            //store to Shared Preferences for loginData
+            loginData.setString('id', data['email']);
+            //convert Map 'data' into String list using json.encode();
+            String convertData = json.encode(data);
+            print(convertData);
+            //store to Shared Preferences for loginData
+            loginData.setString('side', convertData);
             //print(_email.text);
             Navigator.pushReplacement(
                 context,
@@ -117,6 +124,36 @@ class loginPageState extends State<loginPage> {
     });
   }
 
+  //using shared preferences, if a user has logged in previously, then loginData was stored in persistent memory, implementing one time login, until user logouts
+  void isLoggedIn() async {
+    print('isLoggedinFunction is running');
+    loginData = await SharedPreferences.getInstance();
+    newUser = (loginData.getBool('login') ?? true);
+
+    print(newUser);
+
+    if (newUser == false) {
+      String storedEmail = loginData.getString('id')!;
+      //decode stored String list into a Map
+      String storedData = loginData.getString('side')!;
+      Map<dynamic, dynamic> side = json.decode(storedData);
+      print(side);
+      //navigate to dashboard
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  mainDashboard(id: storedEmail, side: side)));
+    }
+  }
+
+  //init State for checkIfLoggedIn
+  @override
+  void initState() {
+    print('initState started');
+    super.initState();
+    isLoggedIn();
+  }
   //login Page UI
   @override
   Widget build(BuildContext context) {

@@ -3,6 +3,7 @@ import 'package:airduino/dashboard/functions/conversionMethod.dart';
 import 'package:airduino/dashboard/functions/deviceReading.dart';
 import 'package:airduino/dashboard/functions/recommendAction.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'functions/getStatus.dart';
 import '../auth/loginPage.dart';
 import './profile/viewProfile.dart';
@@ -20,12 +21,14 @@ class mainDashboard extends StatefulWidget {
 
 bool isPageLoading = true;
 bool _isBodyLoading = false;
+late SharedPreferences loginData;
 
 class mainDashboardState extends State<mainDashboard> {
   //store user data in map
   String userID;
   Map side;
   mainDashboardState(this.userID, this.side);
+  //SharedPreference variable
   //gloabl var foruserData
   Map userModel = {};
   //gloabl var fordevice data
@@ -65,7 +68,7 @@ class mainDashboardState extends State<mainDashboard> {
       'sulfur': 606,
       'aqi': 120,
     };
-    await Future.delayed(Duration(seconds: 2));
+    //await Future.delayed(Duration(seconds: 2));
     setState(() {
       _isBodyLoading = false;
       proto_01 = device;
@@ -97,14 +100,29 @@ class mainDashboardState extends State<mainDashboard> {
     });
   }
 
+  void fetchLoginData() async {
+    loginData = await SharedPreferences.getInstance();
+  }
+
   //init State
   @override
   void initState() {
     print('initState is running');
     super.initState();
+    //fetch stored data in sharedPrefs
+    fetchLoginData();
     //fetch user data and latest reading on initialization
     getUserData();
     _refreshBody();
+  }
+
+  @override
+  void dispose() {
+    print('dispose() is running');
+    super.dispose();
+    loginData.remove('id');
+    loginData.remove('side');
+    print('loginData: {$loginData}');
   }
 
   @override
@@ -1180,12 +1198,8 @@ class Sidebar extends StatelessWidget {
               ),
             ),
             onTap: () {
-              // Add your code here to handle the item press
-              //one-time login, TO BE IMPLEMENTED!
-              //final prefs = await SharedPreferences.getInstance();
-              //prefs.setBool('isLoggedIn', false)
-              //print();
-
+              //upon logout, 'login' is set to true, which makes the user go to login upon next app usage
+              loginData.setBool('login', true);
               Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: ((context) => loginPage())));
               //removes route from Stack to avoid issues

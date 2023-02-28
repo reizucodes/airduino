@@ -1,7 +1,10 @@
-// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, camel_case_types, file_names, unused_import
+// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, camel_case_types, file_names, unused_import, use_build_context_synchronously
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 //paths for authentication
 import './auth/loginPage.dart';
+import './dashboard/mainDashboard.dart';
+import 'dart:convert';
 
 //create a scaffold outside [MyApp class]
 class frontPage extends StatefulWidget {
@@ -11,6 +14,39 @@ class frontPage extends StatefulWidget {
 
 //custom state
 class frontPageState extends State<frontPage> {
+  late SharedPreferences loginData;
+  late bool newUser;
+  //using shared preferences, if a user has logged in previously, then loginData was stored in persistent memory, implementing one time login, until user logouts
+  void isLoggedIn() async {
+    print('isLoggedinFunction is running');
+    loginData = await SharedPreferences.getInstance();
+    newUser = (loginData.getBool('login') ?? true);
+
+    print(newUser);
+
+    if (newUser == false) {
+      String storedEmail = loginData.getString('id')!;
+      //decode stored String list into a Map
+      String storedData = loginData.getString('side')!;
+      Map<dynamic, dynamic> side = json.decode(storedData);
+      print('data: {$side}');
+      //navigate to dashboard
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  mainDashboard(id: storedEmail, side: side)));
+    }
+  }
+
+  //init State for checkIfLoggedIn
+  @override
+  void initState() {
+    print('initState started');
+    super.initState();
+    isLoggedIn();
+  }
+
   @override
   Widget build(BuildContext context) {
     //Navigator Route Function to Login
