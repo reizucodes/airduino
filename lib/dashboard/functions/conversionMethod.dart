@@ -3,6 +3,7 @@
 //index: ozone(ppm)
 //sensor: 10 - 1000ppb *needs conversion DONE*
 String getOzone(value) {
+  print('ozone: $value');
   if (value <= 0.054) {
     return 'Good'; //up to 50
   } else if (value >= 0.055 && value <= 0.070) {
@@ -22,6 +23,7 @@ String getOzone(value) {
 //index: pm2.5 (ug/m^3)
 //sensor: 0 - 500 (ug/m^3)
 String getPM(value) {
+  print('pm: $value');
   if (value <= 12.0) {
     return 'Good'; //up to 50
   } else if (value >= 12.1 && value <= 35.4) {
@@ -41,6 +43,7 @@ String getPM(value) {
 //index: carbon monoxide (ppm)
 //sensor: 1-1000 ppm
 String getCarbon(value) {
+  print('carbon: $value');
   if (value <= 4.4) {
     return 'Good'; //up to 50
   } else if (value >= 4.5 && value <= 9.4) {
@@ -60,6 +63,7 @@ String getCarbon(value) {
 //index: sulfur dioxide (ppb)
 //sensor: 1-200 ppm *needs conversion*
 String getSulfur(value) {
+  print('sulfur: $value');
   //value = value - 100;
   if (value <= 35) {
     return 'Good';
@@ -80,6 +84,7 @@ String getSulfur(value) {
 //index: nitrogen dioxide (ppb)
 //sensor: 0.5 - 10ppm *needs conversion DONE*
 String getNitrogen(value) {
+  print('nitrogen: $value');
   if (value <= 53) {
     return 'Good';
   } else if (value >= 54 && value <= 100) {
@@ -98,6 +103,7 @@ String getNitrogen(value) {
 
 //Overall AQI
 String getAqi(value) {
+  print('aqi: $value');
   if (value <= 50) {
     return 'Good';
   } else if (value >= 51 && value <= 100) {

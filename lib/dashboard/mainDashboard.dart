@@ -253,9 +253,9 @@ class mainDashboardState extends State<mainDashboard> {
                                               //color: Colors.red,
                                               width: double.infinity,
                                               child: Text(
-                                                //compute total aqi value and; computeTotalAQI(sensor values) => returns a float value
-                                                //compare aqi value and get index getIndex(computeTotalAQI()) => returns a string
-                                                'Fair',
+                                                //convert aqi value into the index range's class
+                                                getAqi(double.parse(
+                                                    dev1['field7'])),
                                                 style: TextStyle(
                                                     color:
                                                         Colors.green.shade800,
@@ -276,7 +276,7 @@ class mainDashboardState extends State<mainDashboard> {
                                               width: double.infinity,
                                               child: Text(
                                                 //time value
-                                                'As of ${proto_01['timestamp']}',
+                                                'As of ${dev1['created_at']}',
                                                 style: TextStyle(
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.w600,
@@ -323,7 +323,9 @@ class mainDashboardState extends State<mainDashboard> {
                                                   //recommended action based on total AQI
                                                   //function call recommendedAction(genPub, totalAQI) => returns a String(recommended action)
                                                   recommendAction(
-                                                      'General Public', 'Fair'),
+                                                      'General Public',
+                                                      getAqi(double.parse(
+                                                          dev1['field7']))),
                                                   style: TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.w600,
@@ -379,7 +381,9 @@ class mainDashboardState extends State<mainDashboard> {
                                                   //recommended action based on total AQI
                                                   //function call recommendedAction(userStatus, totalAQI) => returns a String(recommended action)
                                                   recommendAction(
-                                                      status, 'Fair'),
+                                                      status,
+                                                      getAqi(double.parse(
+                                                          dev1['field7']))),
                                                   style: TextStyle(
                                                     fontSize: 20,
                                                     fontWeight: FontWeight.w600,
@@ -428,11 +432,13 @@ class mainDashboardState extends State<mainDashboard> {
                                               child: Text(
                                                 //recommended action based on total AQI
                                                 //function call recommendedAction(userStatus, totalAQI) => returns a String(recommended action)
-                                                getPM(proto_01['pm']),
+                                                getPM(double.parse(
+                                                    dev1['field3'])),
                                                 style: TextStyle(
                                                   //replace with color function for pm2.5
-                                                  color: sensorReadings(
-                                                      getPM(proto_01['pm'])),
+                                                  color: sensorReadings(getPM(
+                                                      double.parse(
+                                                          dev1['field3']))),
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.w600,
                                                   letterSpacing: 1.0,
@@ -478,10 +484,13 @@ class mainDashboardState extends State<mainDashboard> {
                                               child: Text(
                                                 //recommended action based on total AQI
                                                 //function call recommendedAction(userStatus, totalAQI) => returns a String(recommended action)
-                                                'Fair',
+                                                getOzone(double.parse(
+                                                    dev1['field2'])),
                                                 style: TextStyle(
-                                                  //replace with color function for pm2.5
-                                                  color: Colors.green.shade800,
+                                                  //replace with color function for ozone
+                                                  color: sensorReadings(
+                                                      getOzone(double.parse(
+                                                          dev1['field2']))),
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.w600,
                                                   letterSpacing: 1.0,
@@ -527,10 +536,13 @@ class mainDashboardState extends State<mainDashboard> {
                                               child: Text(
                                                 //recommended action based on total AQI
                                                 //function call recommendedAction(userStatus, totalAQI) => returns a String(recommended action)
-                                                'Fair',
+                                                getCarbon(double.parse(
+                                                    dev1['field4'])),
                                                 style: TextStyle(
                                                   //replace with color function for pm2.5
-                                                  color: Colors.green.shade800,
+                                                  color: sensorReadings(
+                                                      getCarbon(double.parse(
+                                                          dev1['field4']))),
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.w600,
                                                   letterSpacing: 1.0,
@@ -576,10 +588,13 @@ class mainDashboardState extends State<mainDashboard> {
                                               child: Text(
                                                 //recommended action based on total AQI
                                                 //function call recommendedAction(userStatus, totalAQI) => returns a String(recommended action)
-                                                'Fair',
+                                                getNitrogen(double.parse(
+                                                    dev1['field6'])),
                                                 style: TextStyle(
                                                   //replace with color function for pm2.5
-                                                  color: Colors.green.shade800,
+                                                  color: sensorReadings(
+                                                      getNitrogen(double.parse(
+                                                          dev1['field6']))),
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.w600,
                                                   letterSpacing: 1.0,
@@ -625,10 +640,13 @@ class mainDashboardState extends State<mainDashboard> {
                                               child: Text(
                                                 //recommended action based on total AQI
                                                 //function call recommendedAction(userStatus, totalAQI) => returns a String(recommended action)
-                                                'Fair',
+                                                getSulfur(double.parse(
+                                                    dev1['field5'])),
                                                 style: TextStyle(
-                                                  //replace with color function for pm2.5
-                                                  color: Colors.green.shade800,
+                                                  //replace with color function for sulfur
+                                                  color: sensorReadings(
+                                                      getSulfur(double.parse(
+                                                          dev1['field5']))),
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.w600,
                                                   letterSpacing: 1.0,

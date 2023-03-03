@@ -25,6 +25,7 @@ statusColor(String stat) {
 
 //for sensor readings
 sensorReadings(String value) {
+  print(value);
   switch (value) {
     case 'Good':
       return Colors.green.shade800;
@@ -35,7 +36,7 @@ sensorReadings(String value) {
     case 'Very Poor':
       return Colors.orange.shade800;
     case 'Extremely Poor':
-      return Colors.red.shade700;
+      return Colors.red.shade800;
     default:
       Colors.black;
       break;
