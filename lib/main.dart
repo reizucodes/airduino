@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
             colorScheme: const ColorScheme.light(
                 primary: Color.fromARGB(255, 12, 94, 116))),
-        //create custom class
+        //homepage route
         home: frontPage());
   }
 }

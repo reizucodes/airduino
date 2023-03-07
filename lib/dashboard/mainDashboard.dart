@@ -1,15 +1,15 @@
-// ignore_for_file: camel_case_types, prefer_const_constructors, prefer_const_constructors_in_immutables, use_key_in_widget_constructors, prefer_final_fields, use_build_context_synchronously, no_logic_in_create_state, must_be_immutable, sort_child_properties_last, prefer_adjacent_string_concatenation, prefer_typing_uninitialized_variables, unused_local_variable, prefer_const_declarations, avoid_print
+// ignore_for_file: camel_case_types, prefer_const_constructors, prefer_const_constructors_in_immutables, use_key_in_widget_constructors, prefer_final_fields, use_build_context_synchronously, no_logic_in_create_state, must_be_immutable, sort_child_properties_last, prefer_adjacent_string_concatenation, prefer_typing_uninitialized_variables, unused_local_variable, prefer_const_declarations, avoid_print, non_constant_identifier_names
+import '../auth/loginPage.dart';
+import 'functions/getStatus.dart';
+import './profile/changePass.dart';
+import 'functions/statusColor.dart';
+import './profile/viewProfile.dart';
+import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:airduino/dashboard/functions/conversionMethod.dart';
 import 'package:airduino/dashboard/functions/deviceReading.dart';
 import 'package:airduino/dashboard/functions/recommendAction.dart';
-import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'functions/getStatus.dart';
-import '../auth/loginPage.dart';
-import './profile/viewProfile.dart';
-import './profile/changePass.dart';
-import 'functions/statusColor.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class mainDashboard extends StatefulWidget {
   String id;
@@ -31,15 +31,21 @@ class mainDashboardState extends State<mainDashboard> {
   //SharedPreference variable
   //gloabl var foruserData
   Map userModel = {};
-  //gloabl var fordevice data
-  Map proto_01 = {};
-  Map proto_02 = {};
+  //gloabl var for prototype I data
   Map dev1 = {};
+  //gloabl var for prototype II data
+  Map dev2 = {};
   //sidebar Variables
   var email;
   var pass;
   var name;
   var status;
+  String timestamp1 = '';
+  String dev1_date = '';
+  String dev1_time = '';
+  String timestamp2 = '';
+  String dev2_date = '';
+  String dev2_time = '';
   //fetch and return latest data from device database
   //prototype I and II data latest reading fetch
   Future<void> _refreshBody() async {
@@ -51,28 +57,38 @@ class mainDashboardState extends State<mainDashboard> {
         'https://api.thingspeak.com/channels/1984955/feeds.json?api_key=NDNMXQL1V5H7A54X&results=1';
     //function call for latest reading fetching
     Map<String, dynamic> pd01 = await getReadings(api01);
+    print(pd01);
     //PDID-02 device reading
     final String api02 =
         'https://api.thingspeak.com/channels/2036851/feeds.json?api_key=9XT7144SEWL028E4&results=1';
     //function call for latest reading fetching
-    //Map pd02 = await getReadings(api02);
-    //print(pd02);
-    //dummy data for function testing
-    Map<dynamic, dynamic> device = {
-      'temp': 20,
-      'timestamp': '14:55',
-      'pm': 36.0,
-      'ozone': 0.087,
-      'carbon': 4.4,
-      'nitro': 360,
-      'sulfur': 606,
-      'aqi': 120,
-    };
+    Map pd02 = await getReadings(api02);
+    print('pd02: $pd02');
     //await Future.delayed(Duration(seconds: 2));
     setState(() {
       _isBodyLoading = false;
-      proto_01 = device;
       dev1 = pd01;
+      timestamp1 = dev1['created_at'];
+      DateTime dateTime_dev1 = DateTime.parse(timestamp1);
+      DateTime dateTimeLocal_dev1 = dateTime_dev1.toLocal();
+      //DateTime dateTimeGmt8 = dateTimeLocal.add(Duration(hours: 8));
+      DateTime dateTimeGmt8_dev1 = dateTimeLocal_dev1;
+      print(dateTimeLocal_dev1);
+      dev1_date =
+          "${dateTimeGmt8_dev1.month}-${dateTimeGmt8_dev1.day}-${dateTimeGmt8_dev1.year}";
+      dev1_time =
+          "${dateTimeGmt8_dev1.hour}:${dateTimeGmt8_dev1.minute.toString().padLeft(2, '0')}";
+      dev2 = pd02;
+      timestamp2 = dev2['created_at'];
+      DateTime dateTime_dev2 = DateTime.parse(timestamp2);
+      DateTime dateTimeLocal_dev2 = dateTime_dev2.toLocal();
+      //DateTime dateTimeGmt8 = dateTimeLocal.add(Duration(hours: 8));
+      DateTime dateTimeGmt8_dev2 = dateTimeLocal_dev2;
+      print(dateTimeLocal_dev2);
+      dev2_date =
+          "${dateTimeGmt8_dev2.month}-${dateTimeGmt8_dev2.day}-${dateTimeGmt8_dev2.year}";
+      dev2_time =
+          "${dateTimeGmt8_dev2.hour}:${dateTimeGmt8_dev2.minute.toString().padLeft(2, '0')}";
     });
   }
 
@@ -86,9 +102,6 @@ class mainDashboardState extends State<mainDashboard> {
       },
       onError: (e) => print("error getting data: $e"),
     );
-    //stop page from loading
-    print(model['name']);
-    //await Future.delayed(Duration(seconds: 1));
     setState(() {
       isPageLoading = false;
       //pass value to global variable
@@ -132,6 +145,7 @@ class mainDashboardState extends State<mainDashboard> {
     pass = side['password'];
     name = side['name'];
     status = getStatus(side['userClass']);
+
     //for debugging
     print('runTime');
     return isPageLoading
@@ -156,7 +170,6 @@ class mainDashboardState extends State<mainDashboard> {
                   icon: Icon(color: Colors.white, Icons.refresh_rounded),
                   onPressed: () {
                     //clears data models before refreshing
-                    dev1 = {};
                     _refreshBody();
                     getUserData();
                   },
@@ -241,7 +254,7 @@ class mainDashboardState extends State<mainDashboard> {
                                           ),
                                         ],
                                       ),
-                                      //TOTAL AQI and TIME
+                                      //TOTAL AQI DATE and TIME
                                       Row(
                                         children: [
                                           Expanded(
@@ -257,8 +270,9 @@ class mainDashboardState extends State<mainDashboard> {
                                                 getAqi(double.parse(
                                                     dev1['field7'])),
                                                 style: TextStyle(
-                                                    color:
-                                                        Colors.green.shade800,
+                                                    color: sensorReadings(
+                                                        getAqi(double.parse(
+                                                            dev1['field7']))),
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.w600,
                                                     letterSpacing: 1.5),
@@ -266,6 +280,28 @@ class mainDashboardState extends State<mainDashboard> {
                                             ),
                                             flex: 1,
                                           ),
+                                          /*DATE
+                                          Expanded(
+                                            child: Container(
+                                              margin:
+                                                  EdgeInsets.only(bottom: 5.0),
+                                              height: 30,
+                                              alignment: Alignment.centerRight,
+                                              //color: Colors.blue,
+                                              width: double.infinity,
+                                              child: Text(
+                                                //date value
+                                                dev1_date,
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w600,
+                                                  letterSpacing: 1.5,
+                                                ),
+                                              ),
+                                            ),
+                                            flex: 1,
+                                          ),
+                                          */
                                           Expanded(
                                             child: Container(
                                               margin:
@@ -276,7 +312,7 @@ class mainDashboardState extends State<mainDashboard> {
                                               width: double.infinity,
                                               child: Text(
                                                 //time value
-                                                'As of ${dev1['created_at']}',
+                                                'As of $dev1_time',
                                                 style: TextStyle(
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.w600,
@@ -313,7 +349,7 @@ class mainDashboardState extends State<mainDashboard> {
                                             child: Container(
                                               margin:
                                                   EdgeInsets.only(bottom: 5.0),
-                                              height: 30,
+                                              height: 50,
                                               alignment: Alignment.centerRight,
                                               width: double.infinity,
                                               child: FittedBox(
@@ -397,58 +433,7 @@ class mainDashboardState extends State<mainDashboard> {
                                           ),
                                         ],
                                       ),
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: Container(
-                                              margin:
-                                                  EdgeInsets.only(bottom: 5.0),
-                                              height: 30,
-                                              alignment: Alignment.centerLeft,
-                                              //color: Colors.red,
-                                              width: double.infinity,
-                                              child: FittedBox(
-                                                fit: BoxFit.contain,
-                                                alignment: Alignment.centerLeft,
-                                                child: Text(
-                                                  'PM2.5',
-                                                  style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                      letterSpacing: 1.0),
-                                                ),
-                                              ),
-                                            ),
-                                            flex: 1,
-                                          ),
-                                          Expanded(
-                                            child: Container(
-                                              margin:
-                                                  EdgeInsets.only(bottom: 5.0),
-                                              height: 30,
-                                              alignment: Alignment.centerRight,
-                                              width: double.infinity,
-                                              child: Text(
-                                                //recommended action based on total AQI
-                                                //function call recommendedAction(userStatus, totalAQI) => returns a String(recommended action)
-                                                getPM(double.parse(
-                                                    dev1['field3'])),
-                                                style: TextStyle(
-                                                  //replace with color function for pm2.5
-                                                  color: sensorReadings(getPM(
-                                                      double.parse(
-                                                          dev1['field3']))),
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w600,
-                                                  letterSpacing: 1.0,
-                                                ),
-                                              ),
-                                            ),
-                                            flex: 1,
-                                          ),
-                                        ],
-                                      ),
+                                      //Ozone Row
                                       Row(
                                         children: [
                                           Expanded(
@@ -465,7 +450,7 @@ class mainDashboardState extends State<mainDashboard> {
                                                 child: Text(
                                                   'Ozone',
                                                   style: TextStyle(
-                                                      fontSize: 16,
+                                                      fontSize: 14,
                                                       fontWeight:
                                                           FontWeight.w400,
                                                       letterSpacing: 1.0),
@@ -491,7 +476,7 @@ class mainDashboardState extends State<mainDashboard> {
                                                   color: sensorReadings(
                                                       getOzone(double.parse(
                                                           dev1['field2']))),
-                                                  fontSize: 16,
+                                                  fontSize: 14,
                                                   fontWeight: FontWeight.w600,
                                                   letterSpacing: 1.0,
                                                 ),
@@ -501,6 +486,60 @@ class mainDashboardState extends State<mainDashboard> {
                                           ),
                                         ],
                                       ),
+                                      //PM2.5 Row
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: Container(
+                                              margin:
+                                                  EdgeInsets.only(bottom: 5.0),
+                                              height: 30,
+                                              alignment: Alignment.centerLeft,
+                                              //color: Colors.red,
+                                              width: double.infinity,
+                                              child: FittedBox(
+                                                fit: BoxFit.contain,
+                                                alignment: Alignment.centerLeft,
+                                                child: Text(
+                                                  'PM2.5',
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      letterSpacing: 1.0),
+                                                ),
+                                              ),
+                                            ),
+                                            flex: 1,
+                                          ),
+                                          Expanded(
+                                            child: Container(
+                                              margin:
+                                                  EdgeInsets.only(bottom: 5.0),
+                                              height: 30,
+                                              alignment: Alignment.centerRight,
+                                              width: double.infinity,
+                                              child: Text(
+                                                //recommended action based on total AQI
+                                                //function call recommendedAction(userStatus, totalAQI) => returns a String(recommended action)
+                                                getPM(double.parse(
+                                                    dev1['field3'])),
+                                                style: TextStyle(
+                                                  //replace with color function for pm2.5
+                                                  color: sensorReadings(getPM(
+                                                      double.parse(
+                                                          dev1['field3']))),
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w600,
+                                                  letterSpacing: 1.0,
+                                                ),
+                                              ),
+                                            ),
+                                            flex: 1,
+                                          ),
+                                        ],
+                                      ),
+                                      //Carbon Monoxide Row
                                       Row(
                                         children: [
                                           Expanded(
@@ -517,7 +556,7 @@ class mainDashboardState extends State<mainDashboard> {
                                                 child: Text(
                                                   'Carbon  Monoxide',
                                                   style: TextStyle(
-                                                      fontSize: 16,
+                                                      fontSize: 14,
                                                       fontWeight:
                                                           FontWeight.w400,
                                                       letterSpacing: 1.0),
@@ -543,7 +582,7 @@ class mainDashboardState extends State<mainDashboard> {
                                                   color: sensorReadings(
                                                       getCarbon(double.parse(
                                                           dev1['field4']))),
-                                                  fontSize: 16,
+                                                  fontSize: 14,
                                                   fontWeight: FontWeight.w600,
                                                   letterSpacing: 1.0,
                                                 ),
@@ -553,58 +592,7 @@ class mainDashboardState extends State<mainDashboard> {
                                           ),
                                         ],
                                       ),
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: Container(
-                                              margin:
-                                                  EdgeInsets.only(bottom: 5.0),
-                                              height: 30,
-                                              alignment: Alignment.centerLeft,
-                                              //color: Colors.red,
-                                              width: double.infinity,
-                                              child: FittedBox(
-                                                fit: BoxFit.contain,
-                                                alignment: Alignment.centerLeft,
-                                                child: Text(
-                                                  'Nitrogen Dioxide',
-                                                  style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                      letterSpacing: 1.0),
-                                                ),
-                                              ),
-                                            ),
-                                            flex: 1,
-                                          ),
-                                          Expanded(
-                                            child: Container(
-                                              margin:
-                                                  EdgeInsets.only(bottom: 5.0),
-                                              height: 30,
-                                              alignment: Alignment.centerRight,
-                                              width: double.infinity,
-                                              child: Text(
-                                                //recommended action based on total AQI
-                                                //function call recommendedAction(userStatus, totalAQI) => returns a String(recommended action)
-                                                getNitrogen(double.parse(
-                                                    dev1['field6'])),
-                                                style: TextStyle(
-                                                  //replace with color function for pm2.5
-                                                  color: sensorReadings(
-                                                      getNitrogen(double.parse(
-                                                          dev1['field6']))),
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w600,
-                                                  letterSpacing: 1.0,
-                                                ),
-                                              ),
-                                            ),
-                                            flex: 1,
-                                          ),
-                                        ],
-                                      ),
+                                      //Sulfur Row
                                       Row(
                                         children: [
                                           Expanded(
@@ -621,7 +609,7 @@ class mainDashboardState extends State<mainDashboard> {
                                                 child: Text(
                                                   'Sulfur Dioxide',
                                                   style: TextStyle(
-                                                      fontSize: 16,
+                                                      fontSize: 14,
                                                       fontWeight:
                                                           FontWeight.w400,
                                                       letterSpacing: 1.0),
@@ -647,7 +635,60 @@ class mainDashboardState extends State<mainDashboard> {
                                                   color: sensorReadings(
                                                       getSulfur(double.parse(
                                                           dev1['field5']))),
-                                                  fontSize: 16,
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w600,
+                                                  letterSpacing: 1.0,
+                                                ),
+                                              ),
+                                            ),
+                                            flex: 1,
+                                          ),
+                                        ],
+                                      ),
+                                      //Nitrogen Row
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: Container(
+                                              margin:
+                                                  EdgeInsets.only(bottom: 5.0),
+                                              height: 30,
+                                              alignment: Alignment.centerLeft,
+                                              //color: Colors.red,
+                                              width: double.infinity,
+                                              child: FittedBox(
+                                                fit: BoxFit.contain,
+                                                alignment: Alignment.centerLeft,
+                                                child: Text(
+                                                  'Nitrogen Dioxide',
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      letterSpacing: 1.0),
+                                                ),
+                                              ),
+                                            ),
+                                            flex: 1,
+                                          ),
+                                          Expanded(
+                                            child: Container(
+                                              margin:
+                                                  EdgeInsets.only(bottom: 5.0),
+                                              height: 30,
+                                              alignment: Alignment.centerRight,
+                                              width: double.infinity,
+                                              child: Text(
+                                                //recommended action based on total AQI
+                                                //function call recommendedAction(userStatus, totalAQI) => returns a String(recommended action)
+                                                getNitrogen(double.parse(
+                                                    dev1['field6'])),
+                                                style: TextStyle(
+                                                  //replace with color function for pm2.5
+                                                  color: sensorReadings(
+                                                      getNitrogen(double.parse(
+                                                          dev1['field6']))),
+                                                  fontSize: 14,
                                                   fontWeight: FontWeight.w600,
                                                   letterSpacing: 1.0,
                                                 ),
@@ -710,7 +751,8 @@ class mainDashboardState extends State<mainDashboard> {
                                               width: double.infinity,
                                               child: Text(
                                                 //temperature value
-                                                '45° C',
+                                                '${double.parse(dev2['field1'])} ° C',
+                                                //'37° C',
                                                 style: TextStyle(
                                                   fontSize: 18,
                                                   fontWeight: FontWeight.w600,
@@ -721,7 +763,7 @@ class mainDashboardState extends State<mainDashboard> {
                                           ),
                                         ],
                                       ),
-                                      //TOTAL AQI and TIME
+                                      //TOTAL AQI DATE and TIME
                                       Row(
                                         children: [
                                           Expanded(
@@ -733,12 +775,13 @@ class mainDashboardState extends State<mainDashboard> {
                                               //color: Colors.red,
                                               width: double.infinity,
                                               child: Text(
-                                                //compute total aqi value and; computeTotalAQI(sensor values) => returns a float value
-                                                //compare aqi value and get index getIndex(computeTotalAQI()) => returns a string
-                                                'Fair',
+                                                //convert aqi value into the index range's class
+                                                getAqi(double.parse(
+                                                    dev2['field7'])),
                                                 style: TextStyle(
-                                                    color:
-                                                        Colors.green.shade800,
+                                                    color: sensorReadings(
+                                                        getAqi(double.parse(
+                                                            dev2['field7']))),
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.w600,
                                                     letterSpacing: 1.5),
@@ -746,6 +789,28 @@ class mainDashboardState extends State<mainDashboard> {
                                             ),
                                             flex: 1,
                                           ),
+                                          /*DATE
+                                          Expanded(
+                                            child: Container(
+                                              margin:
+                                                  EdgeInsets.only(bottom: 5.0),
+                                              height: 30,
+                                              alignment: Alignment.centerRight,
+                                              //color: Colors.blue,
+                                              width: double.infinity,
+                                              child: Text(
+                                                //date value
+                                                dev2_date,
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w600,
+                                                  letterSpacing: 1.5,
+                                                ),
+                                              ),
+                                            ),
+                                            flex: 1,
+                                          ),
+                                          */
                                           Expanded(
                                             child: Container(
                                               margin:
@@ -756,7 +821,7 @@ class mainDashboardState extends State<mainDashboard> {
                                               width: double.infinity,
                                               child: Text(
                                                 //time value
-                                                'As of 9:00 AM',
+                                                'As of $dev2_time',
                                                 style: TextStyle(
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.w600,
@@ -793,17 +858,24 @@ class mainDashboardState extends State<mainDashboard> {
                                             child: Container(
                                               margin:
                                                   EdgeInsets.only(bottom: 5.0),
-                                              height: 30,
+                                              height: 50,
                                               alignment: Alignment.centerRight,
                                               width: double.infinity,
-                                              child: Text(
-                                                //recommended action based on total AQI
-                                                //function call recommendedAction(genPub, totalAQI) => returns a String(recommended action)
-                                                'Safe',
-                                                style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w600,
-                                                  letterSpacing: 1.0,
+                                              child: FittedBox(
+                                                fit: BoxFit.contain,
+                                                alignment: Alignment.centerLeft,
+                                                child: Text(
+                                                  //recommended action based on total AQI
+                                                  //function call recommendedAction(genPub, totalAQI) => returns a String(recommended action)
+                                                  recommendAction(
+                                                      'General Public',
+                                                      getAqi(double.parse(
+                                                          dev2['field7']))),
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w600,
+                                                    letterSpacing: 1.0,
+                                                  ),
                                                 ),
                                               ),
                                             ),
@@ -828,14 +900,13 @@ class mainDashboardState extends State<mainDashboard> {
                                                 child: Text(
                                                   status,
                                                   style: TextStyle(
-                                                      //color: Colors.green,
                                                       color: statusColor(
                                                           userModel[
                                                               'userClass']),
                                                       fontSize: 16,
                                                       fontWeight:
-                                                          FontWeight.w400,
-                                                      letterSpacing: 1.0),
+                                                          FontWeight.w500,
+                                                      letterSpacing: 1.5),
                                                 ),
                                               ),
                                             ),
@@ -847,64 +918,23 @@ class mainDashboardState extends State<mainDashboard> {
                                                   EdgeInsets.only(bottom: 5.0),
                                               height: 30,
                                               alignment: Alignment.centerRight,
-                                              width: double.infinity,
-                                              child: Text(
-                                                //recommended action based on total AQI
-                                                //function call recommendedAction(userStatus, totalAQI) => returns a String(recommended action)
-                                                'Safe',
-                                                style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w600,
-                                                  letterSpacing: 1.0,
-                                                ),
-                                              ),
-                                            ),
-                                            flex: 1,
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: Container(
-                                              margin:
-                                                  EdgeInsets.only(bottom: 5.0),
-                                              height: 30,
-                                              alignment: Alignment.centerLeft,
-                                              //color: Colors.red,
                                               width: double.infinity,
                                               child: FittedBox(
                                                 fit: BoxFit.contain,
-                                                alignment: Alignment.centerLeft,
+                                                alignment: Alignment.center,
                                                 child: Text(
-                                                  'PM2.5',
+                                                  //recommended action based on total AQI
+                                                  //function call recommendedAction(userStatus, totalAQI) => returns a String(recommended action)
+                                                  recommendAction(
+                                                      status,
+                                                      getAqi(double.parse(
+                                                          dev2['field7']))),
                                                   style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                      letterSpacing: 1.0),
-                                                ),
-                                              ),
-                                            ),
-                                            flex: 1,
-                                          ),
-                                          Expanded(
-                                            child: Container(
-                                              margin:
-                                                  EdgeInsets.only(bottom: 5.0),
-                                              height: 30,
-                                              alignment: Alignment.centerRight,
-                                              width: double.infinity,
-                                              child: Text(
-                                                //recommended action based on total AQI
-                                                //function call recommendedAction(userStatus, totalAQI) => returns a String(recommended action)
-                                                'Fair',
-                                                style: TextStyle(
-                                                  //replace with color function for pm2.5
-                                                  color: Colors.green.shade800,
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w600,
-                                                  letterSpacing: 1.0,
+                                                    fontSize: 20,
+                                                    fontWeight: FontWeight.w600,
+                                                    letterSpacing: 1.0,
+                                                    //backgroundColor: Colors.red,
+                                                  ),
                                                 ),
                                               ),
                                             ),
@@ -912,6 +942,7 @@ class mainDashboardState extends State<mainDashboard> {
                                           ),
                                         ],
                                       ),
+                                      //Ozone Row
                                       Row(
                                         children: [
                                           Expanded(
@@ -928,7 +959,7 @@ class mainDashboardState extends State<mainDashboard> {
                                                 child: Text(
                                                   'Ozone',
                                                   style: TextStyle(
-                                                      fontSize: 16,
+                                                      fontSize: 14,
                                                       fontWeight:
                                                           FontWeight.w400,
                                                       letterSpacing: 1.0),
@@ -947,11 +978,14 @@ class mainDashboardState extends State<mainDashboard> {
                                               child: Text(
                                                 //recommended action based on total AQI
                                                 //function call recommendedAction(userStatus, totalAQI) => returns a String(recommended action)
-                                                'Fair',
+                                                getOzone(double.parse(
+                                                    dev2['field2'])),
                                                 style: TextStyle(
-                                                  //replace with color function for pm2.5
-                                                  color: Colors.green.shade800,
-                                                  fontSize: 16,
+                                                  //replace with color function for ozone
+                                                  color: sensorReadings(
+                                                      getOzone(double.parse(
+                                                          dev2['field2']))),
+                                                  fontSize: 14,
                                                   fontWeight: FontWeight.w600,
                                                   letterSpacing: 1.0,
                                                 ),
@@ -961,6 +995,60 @@ class mainDashboardState extends State<mainDashboard> {
                                           ),
                                         ],
                                       ),
+                                      //PM2.5 Row
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: Container(
+                                              margin:
+                                                  EdgeInsets.only(bottom: 5.0),
+                                              height: 30,
+                                              alignment: Alignment.centerLeft,
+                                              //color: Colors.red,
+                                              width: double.infinity,
+                                              child: FittedBox(
+                                                fit: BoxFit.contain,
+                                                alignment: Alignment.centerLeft,
+                                                child: Text(
+                                                  'PM2.5',
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      letterSpacing: 1.0),
+                                                ),
+                                              ),
+                                            ),
+                                            flex: 1,
+                                          ),
+                                          Expanded(
+                                            child: Container(
+                                              margin:
+                                                  EdgeInsets.only(bottom: 5.0),
+                                              height: 30,
+                                              alignment: Alignment.centerRight,
+                                              width: double.infinity,
+                                              child: Text(
+                                                //recommended action based on total AQI
+                                                //function call recommendedAction(userStatus, totalAQI) => returns a String(recommended action)
+                                                getPM(double.parse(
+                                                    dev2['field3'])),
+                                                style: TextStyle(
+                                                  //replace with color function for pm2.5
+                                                  color: sensorReadings(getPM(
+                                                      double.parse(
+                                                          dev2['field3']))),
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w600,
+                                                  letterSpacing: 1.0,
+                                                ),
+                                              ),
+                                            ),
+                                            flex: 1,
+                                          ),
+                                        ],
+                                      ),
+                                      //Carbon Monoxide Row
                                       Row(
                                         children: [
                                           Expanded(
@@ -977,7 +1065,7 @@ class mainDashboardState extends State<mainDashboard> {
                                                 child: Text(
                                                   'Carbon  Monoxide',
                                                   style: TextStyle(
-                                                      fontSize: 16,
+                                                      fontSize: 14,
                                                       fontWeight:
                                                           FontWeight.w400,
                                                       letterSpacing: 1.0),
@@ -996,11 +1084,14 @@ class mainDashboardState extends State<mainDashboard> {
                                               child: Text(
                                                 //recommended action based on total AQI
                                                 //function call recommendedAction(userStatus, totalAQI) => returns a String(recommended action)
-                                                'Fair',
+                                                getCarbon(double.parse(
+                                                    dev2['field4'])),
                                                 style: TextStyle(
                                                   //replace with color function for pm2.5
-                                                  color: Colors.green.shade800,
-                                                  fontSize: 16,
+                                                  color: sensorReadings(
+                                                      getCarbon(double.parse(
+                                                          dev2['field4']))),
+                                                  fontSize: 14,
                                                   fontWeight: FontWeight.w600,
                                                   letterSpacing: 1.0,
                                                 ),
@@ -1010,55 +1101,7 @@ class mainDashboardState extends State<mainDashboard> {
                                           ),
                                         ],
                                       ),
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: Container(
-                                              margin:
-                                                  EdgeInsets.only(bottom: 5.0),
-                                              height: 30,
-                                              alignment: Alignment.centerLeft,
-                                              //color: Colors.red,
-                                              width: double.infinity,
-                                              child: FittedBox(
-                                                fit: BoxFit.contain,
-                                                alignment: Alignment.centerLeft,
-                                                child: Text(
-                                                  'Nitrogen Dioxide',
-                                                  style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                      letterSpacing: 1.0),
-                                                ),
-                                              ),
-                                            ),
-                                            flex: 1,
-                                          ),
-                                          Expanded(
-                                            child: Container(
-                                              margin:
-                                                  EdgeInsets.only(bottom: 5.0),
-                                              height: 30,
-                                              alignment: Alignment.centerRight,
-                                              width: double.infinity,
-                                              child: Text(
-                                                //recommended action based on total AQI
-                                                //function call recommendedAction(userStatus, totalAQI) => returns a String(recommended action)
-                                                'Fair',
-                                                style: TextStyle(
-                                                  //replace with color function for pm2.5
-                                                  color: Colors.green.shade800,
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w600,
-                                                  letterSpacing: 1.0,
-                                                ),
-                                              ),
-                                            ),
-                                            flex: 1,
-                                          ),
-                                        ],
-                                      ),
+                                      //Sulfur Row
                                       Row(
                                         children: [
                                           Expanded(
@@ -1075,7 +1118,7 @@ class mainDashboardState extends State<mainDashboard> {
                                                 child: Text(
                                                   'Sulfur Dioxide',
                                                   style: TextStyle(
-                                                      fontSize: 16,
+                                                      fontSize: 14,
                                                       fontWeight:
                                                           FontWeight.w400,
                                                       letterSpacing: 1.0),
@@ -1094,11 +1137,67 @@ class mainDashboardState extends State<mainDashboard> {
                                               child: Text(
                                                 //recommended action based on total AQI
                                                 //function call recommendedAction(userStatus, totalAQI) => returns a String(recommended action)
-                                                'Fair',
+                                                getSulfur(double.parse(
+                                                    dev2['field5'])),
+                                                style: TextStyle(
+                                                  //replace with color function for sulfur
+                                                  color: sensorReadings(
+                                                      getSulfur(double.parse(
+                                                          dev2['field5']))),
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w600,
+                                                  letterSpacing: 1.0,
+                                                ),
+                                              ),
+                                            ),
+                                            flex: 1,
+                                          ),
+                                        ],
+                                      ),
+                                      //Nitrogen Row
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: Container(
+                                              margin:
+                                                  EdgeInsets.only(bottom: 5.0),
+                                              height: 30,
+                                              alignment: Alignment.centerLeft,
+                                              //color: Colors.red,
+                                              width: double.infinity,
+                                              child: FittedBox(
+                                                fit: BoxFit.contain,
+                                                alignment: Alignment.centerLeft,
+                                                child: Text(
+                                                  'Nitrogen Dioxide',
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      letterSpacing: 1.0),
+                                                ),
+                                              ),
+                                            ),
+                                            flex: 1,
+                                          ),
+                                          Expanded(
+                                            child: Container(
+                                              margin:
+                                                  EdgeInsets.only(bottom: 5.0),
+                                              height: 30,
+                                              alignment: Alignment.centerRight,
+                                              width: double.infinity,
+                                              child: Text(
+                                                //recommended action based on total AQI
+                                                //function call recommendedAction(userStatus, totalAQI) => returns a String(recommended action)
+                                                getNitrogen(double.parse(
+                                                    dev2['field6'])),
                                                 style: TextStyle(
                                                   //replace with color function for pm2.5
-                                                  color: Colors.green.shade800,
-                                                  fontSize: 16,
+                                                  color: sensorReadings(
+                                                      getNitrogen(double.parse(
+                                                          dev2['field6']))),
+                                                  fontSize: 14,
                                                   fontWeight: FontWeight.w600,
                                                   letterSpacing: 1.0,
                                                 ),

@@ -30,7 +30,7 @@ sensorReadings(String value) {
     case 'Good':
       return Colors.green.shade800;
     case 'Fair':
-      return Colors.yellow.shade800;
+      return Colors.yellow.shade900;
     case 'Poor':
       return Colors.orange.shade800;
     case 'Very Poor':

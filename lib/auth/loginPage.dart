@@ -63,60 +63,67 @@ class loginPageState extends State<loginPage> {
 
   //FIREBASE AUTHLOGIN!
   Future<void> loginFirebase(BuildContext context) async {
-    String hashed = hashPassword(_pass.text);
     setState(() {
       _isLoading = true;
     });
 
-    if (await isUserExisting(_email.text)) {
-      //if user exists; continue authentication
-      final user =
-          FirebaseFirestore.instance.collection('users-db').doc(_email.text);
-      user.get().then(
-        (DocumentSnapshot doc) async {
-          final data = doc.data() as Map<String, dynamic>;
-          //if correct email and password input, then;
-          //go to dashboard
-          if (hashed == data['password']) {
-            //user will be set as currently logged in
-            loginData.setBool('login', false);
-            //store to Shared Preferences for loginData
-            loginData.setString('id', data['email']);
-            //convert Map 'data' into String list using json.encode();
-            String convertData = json.encode(data);
-            print(convertData);
-            //store to Shared Preferences for loginData
-            loginData.setString('side', convertData);
-            //print(_email.text);
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        mainDashboard(id: data['email'], side: data)));
-            //removes route from Stack to avoid issues
-            Navigator.removeRoute(context, ModalRoute.of(context) as PageRoute);
-            clearUserMap(data.toString());
-            _email.clear();
-            _pass.clear();
-          }
-          //else if correct email but wrong password
-          else if (_pass.text != data['password']) {
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              content: Text('Incorrect Credentials'),
-            ));
-            _pass.clear();
-            await clearLoginCache();
-          }
-        },
-        onError: (e) => print("error getting data: $e"),
-      );
-    } else {
+    if (_email.text == '' || _pass.text == '') {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('User not found.'),
+        content: Text('Please input needed information.'),
       ));
-      _email.clear();
-      _pass.clear();
-      await clearLoginCache();
+    } else {
+      String hashed = hashPassword(_pass.text);
+      if (await isUserExisting(_email.text)) {
+        //if user exists; continue authentication
+        final user =
+            FirebaseFirestore.instance.collection('users-db').doc(_email.text);
+        user.get().then(
+          (DocumentSnapshot doc) async {
+            final data = doc.data() as Map<String, dynamic>;
+            //if correct email and password input, then;
+            //go to dashboard
+            if (hashed == data['password']) {
+              //user will be set as currently logged in
+              loginData.setBool('login', false);
+              //store to Shared Preferences for loginData
+              loginData.setString('id', data['email']);
+              //convert Map 'data' into String list using json.encode();
+              String convertData = json.encode(data);
+              print(convertData);
+              //store to Shared Preferences for loginData
+              loginData.setString('side', convertData);
+              //print(_email.text);
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          mainDashboard(id: data['email'], side: data)));
+              //removes route from Stack to avoid issues
+              Navigator.removeRoute(
+                  context, ModalRoute.of(context) as PageRoute);
+              clearUserMap(data.toString());
+              _email.clear();
+              _pass.clear();
+            }
+            //else if correct email but wrong password
+            else if (_pass.text != data['password']) {
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content: Text('Incorrect Credentials'),
+              ));
+              _pass.clear();
+              await clearLoginCache();
+            }
+          },
+          onError: (e) => print("error getting data: $e"),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('User not found.'),
+        ));
+        _email.clear();
+        _pass.clear();
+        await clearLoginCache();
+      }
     }
     //end
     setState(() {
@@ -130,7 +137,7 @@ class loginPageState extends State<loginPage> {
     loginData = await SharedPreferences.getInstance();
     newUser = (loginData.getBool('login') ?? true);
 
-    print(newUser);
+    print('newUser: $newUser');
 
     if (newUser == false) {
       String storedEmail = loginData.getString('id')!;
@@ -148,12 +155,15 @@ class loginPageState extends State<loginPage> {
   }
 
   //init State for checkIfLoggedIn
+
   @override
   void initState() {
     print('initState started');
     super.initState();
+    print('checks if a user is logged in...');
     isLoggedIn();
   }
+
   //login Page UI
   @override
   Widget build(BuildContext context) {
