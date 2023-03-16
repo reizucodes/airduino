@@ -46,6 +46,8 @@ class mainDashboardState extends State<mainDashboard> {
   String timestamp2 = '';
   String dev2_date = '';
   String dev2_time = '';
+  var temp1;
+  var temp2;
   //fetch and return latest data from device database
   //prototype I and II data latest reading fetch
   Future<void> _refreshBody() async {
@@ -89,6 +91,11 @@ class mainDashboardState extends State<mainDashboard> {
           "${dateTimeGmt8_dev2.month}-${dateTimeGmt8_dev2.day}-${dateTimeGmt8_dev2.year}";
       dev2_time =
           "${dateTimeGmt8_dev2.hour}:${dateTimeGmt8_dev2.minute.toString().padLeft(2, '0')}";
+      //temperature values
+      temp1 = double.parse(dev1['field1']);
+      temp1 = double.parse(temp1.toStringAsFixed(1));
+      temp2 = double.parse(dev2['field1']);
+      temp2 = double.parse(temp2.toStringAsFixed(1));
     });
   }
 
@@ -242,7 +249,7 @@ class mainDashboardState extends State<mainDashboard> {
                                               width: double.infinity,
                                               child: Text(
                                                 //temperature value
-                                                '${double.parse(dev1['field1'])} ° C',
+                                                '$temp1 ° C',
                                                 //'37° C',
                                                 style: TextStyle(
                                                   fontSize: 18,
@@ -751,7 +758,7 @@ class mainDashboardState extends State<mainDashboard> {
                                               width: double.infinity,
                                               child: Text(
                                                 //temperature value
-                                                '${double.parse(dev2['field1'])} ° C',
+                                                '$temp2 ° C',
                                                 //'37° C',
                                                 style: TextStyle(
                                                   fontSize: 18,
