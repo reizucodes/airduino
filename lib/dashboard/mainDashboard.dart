@@ -331,7 +331,8 @@ class mainDashboardState extends State<mainDashboard> {
                                           ),
                                         ],
                                       ),
-                                      //Recommmended Actions : General Public DEFAULT
+
+                                      /*
                                       Row(
                                         children: [
                                           Expanded(
@@ -381,7 +382,9 @@ class mainDashboardState extends State<mainDashboard> {
                                           ),
                                         ],
                                       ),
-                                      //Recommended Action: User's status based
+                                      */
+
+                                      /*
                                       Row(
                                         children: [
                                           Expanded(
@@ -440,6 +443,7 @@ class mainDashboardState extends State<mainDashboard> {
                                           ),
                                         ],
                                       ),
+                                      */
                                       //Ozone Row
                                       Row(
                                         children: [
@@ -705,6 +709,97 @@ class mainDashboardState extends State<mainDashboard> {
                                           ),
                                         ],
                                       ),
+                                      Divider(
+                                        height: 2,
+                                        thickness: 2,
+                                      ),
+                                      //Recommmended Actions : General Public DEFAULT
+                                      Container(
+                                        margin: EdgeInsets.only(top: 5.0),
+                                        height: 30,
+                                        alignment: Alignment.centerLeft,
+                                        //color: Colors.red,
+                                        width: double.infinity,
+                                        child: Text(
+                                          'General Public',
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w400,
+                                              letterSpacing: 1.0),
+                                        ),
+                                      ),
+                                      Container(
+                                        //margin: EdgeInsets.only(bottom: 5.0),
+                                        //color: Colors.blue,
+                                        height: 30,
+                                        alignment: Alignment.centerLeft,
+                                        width: double.infinity,
+                                        child: FittedBox(
+                                          fit: BoxFit.contain,
+                                          alignment: Alignment.centerLeft,
+                                          child: Text(
+                                            //recommended action based on total AQI
+                                            //function call recommendedAction(genPub, totalAQI) => returns a String(recommended action)
+                                            recommendAction(
+                                                'General Public',
+                                                getAqi(double.parse(
+                                                    dev1['field7']))),
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w400,
+                                              letterSpacing: 1.0,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      //Recommended Action: User's status based
+                                      Container(
+                                        //margin: EdgeInsets.only(bottom: 5.0),
+                                        height: 30,
+                                        alignment: Alignment.centerLeft,
+                                        //color: Colors.red,
+                                        width: double.infinity,
+                                        child: FittedBox(
+                                          fit: BoxFit.contain,
+                                          alignment: Alignment.centerLeft,
+                                          child: Text(
+                                            status,
+                                            style: TextStyle(
+                                                color: statusColor(
+                                                    userModel['userClass']),
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w500,
+                                                letterSpacing: 1.0),
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.only(bottom: 5.0),
+                                        //color: Colors.blue,
+                                        height: 30,
+                                        alignment: Alignment.centerLeft,
+                                        width: double.infinity,
+                                        child: FittedBox(
+                                          //fit: BoxFit.contain,
+                                          alignment: Alignment.centerLeft,
+                                          child: Text(
+                                            //returns a String(recommended action)
+                                            recommendAction(
+                                                status,
+                                                getAqi(double.parse(
+                                                    dev1['field7']))),
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w400,
+                                              letterSpacing: 1.0,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Divider(
+                                        height: 2,
+                                        thickness: 2,
+                                      ),
                                     ],
                                   )),
                               SizedBox(
@@ -840,6 +935,7 @@ class mainDashboardState extends State<mainDashboard> {
                                           ),
                                         ],
                                       ),
+                                      /*
                                       //Recommmended Actions : General Public DEFAULT
                                       Row(
                                         children: [
@@ -949,6 +1045,7 @@ class mainDashboardState extends State<mainDashboard> {
                                           ),
                                         ],
                                       ),
+                                      */
                                       //Ozone Row
                                       Row(
                                         children: [
@@ -1214,8 +1311,102 @@ class mainDashboardState extends State<mainDashboard> {
                                           ),
                                         ],
                                       ),
+                                      Divider(
+                                        height: 2,
+                                        thickness: 2,
+                                      ),
+                                      //Recommmended Actions : General Public DEFAULT
+                                      Container(
+                                        margin: EdgeInsets.only(top: 5.0),
+                                        height: 30,
+                                        alignment: Alignment.centerLeft,
+                                        //color: Colors.red,
+                                        width: double.infinity,
+                                        child: Text(
+                                          'General Public',
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w400,
+                                              letterSpacing: 1.0),
+                                        ),
+                                      ),
+                                      Container(
+                                        //margin: EdgeInsets.only(bottom: 5.0),
+                                        //color: Colors.blue,
+                                        height: 30,
+                                        alignment: Alignment.centerLeft,
+                                        width: double.infinity,
+                                        child: FittedBox(
+                                          fit: BoxFit.contain,
+                                          alignment: Alignment.centerLeft,
+                                          child: Text(
+                                            //recommended action based on total AQI
+                                            //function call recommendedAction(genPub, totalAQI) => returns a String(recommended action)
+                                            recommendAction(
+                                                'General Public',
+                                                getAqi(double.parse(
+                                                    dev2['field7']))),
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w400,
+                                              letterSpacing: 1.0,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      //Recommended Action: User's status based
+                                      Container(
+                                        //margin: EdgeInsets.only(bottom: 5.0),
+                                        height: 30,
+                                        alignment: Alignment.centerLeft,
+                                        //color: Colors.red,
+                                        width: double.infinity,
+                                        child: FittedBox(
+                                          fit: BoxFit.contain,
+                                          alignment: Alignment.centerLeft,
+                                          child: Text(
+                                            status,
+                                            style: TextStyle(
+                                                color: statusColor(
+                                                    userModel['userClass']),
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w500,
+                                                letterSpacing: 1.0),
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.only(bottom: 5.0),
+                                        //color: Colors.blue,
+                                        height: 30,
+                                        alignment: Alignment.centerLeft,
+                                        width: double.infinity,
+                                        child: FittedBox(
+                                          //fit: BoxFit.contain,
+                                          alignment: Alignment.centerLeft,
+                                          child: Text(
+                                            //returns a String(recommended action)
+                                            recommendAction(
+                                                status,
+                                                getAqi(double.parse(
+                                                    dev2['field7']))),
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w400,
+                                              letterSpacing: 1.0,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Divider(
+                                        height: 2,
+                                        thickness: 2,
+                                      ),
                                     ],
                                   )),
+                              SizedBox(
+                                height: 20,
+                              ),
                             ],
                           ),
                         ),

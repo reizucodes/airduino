@@ -82,8 +82,9 @@ recommendAction(String status, String aqi) {
           action = 'Keep activity low';
           return action;
         case 'Poor':
+          //'Keep an eye out for signs of coughing or shortness of breath, or unusual fatigue which may indicate a serious problem'
           action =
-              'Keep an eye out for signs of coughing or shortness of breath, or unusual fatigue which may indicate a serious problem';
+              'Signs of coughing/unusual fatigue may indicate a serious problem.';
           return action;
         case 'Very Poor':
           action = 'Always have access to quick-relief medicines.';
