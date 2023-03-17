@@ -1,4 +1,5 @@
 // ignore_for_file: no_logic_in_create_state, prefer_final_fields, unused_field, use_key_in_widget_constructors, prefer_const_constructors, prefer_const_literals_to_create_immutables, camel_case_types, must_be_immutable
+import 'package:airduino/dashboard/functions/statusColor.dart';
 import 'package:flutter/material.dart';
 import './authUser.dart';
 import '../mainDashboard.dart';
@@ -57,7 +58,7 @@ class viewProfileState extends State<viewProfile> {
               child: Text(
                 name.toUpperCase(),
                 style: TextStyle(
-                    color: Colors.white,
+                    color: Colors.white70,
                     fontWeight: FontWeight.bold,
                     fontSize: 20.0),
               ),
@@ -65,23 +66,23 @@ class viewProfileState extends State<viewProfile> {
             Container(
               decoration: BoxDecoration(
                 boxShadow: [
-                  BoxShadow(blurRadius: 20.0, color: Colors.grey.shade800)
+                  BoxShadow(blurRadius: 20.0, color: Colors.grey.shade700)
                 ],
-                color: Colors.white,
+                color: Colors.white70,
                 //border: Border.all(width: 0),
                 borderRadius: BorderRadius.all(Radius.circular(15)),
               ),
               margin: EdgeInsets.only(left: 25, right: 25, bottom: 30.0),
               padding: EdgeInsets.all(20.0),
-              height: 280,
+              height: 250,
               width: 280,
               //color: Colors.red,
               child: Column(children: [
                 Text(
                   'STATUS',
                   style: TextStyle(
-                    letterSpacing: 3.0,
-                    fontSize: 22,
+                    letterSpacing: 2.0,
+                    fontSize: 18,
                     fontWeight: FontWeight.w900,
                   ),
                 ),
@@ -90,7 +91,9 @@ class viewProfileState extends State<viewProfile> {
                   child: Text(
                     status.toUpperCase(),
                     style: TextStyle(
-                        letterSpacing: 3.0,
+                        letterSpacing: 2.0,
+                        color: statusColor(colorStat),
+                        /*
                         color: colorStat == '0'
                             ? Colors.green.shade800
                             : colorStat == '1'
@@ -104,15 +107,16 @@ class viewProfileState extends State<viewProfile> {
                                             : colorStat == '5'
                                                 ? Colors.red.shade700
                                                 : Colors.black,
-                        fontWeight: FontWeight.w900,
-                        fontSize: 15.0),
+                                                */
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14.0),
                   ),
                 ),
                 Text(
                   'BIRTHDATE',
                   style: TextStyle(
-                    letterSpacing: 3.0,
-                    fontSize: 22,
+                    letterSpacing: 2.0,
+                    fontSize: 18,
                     fontWeight: FontWeight.w900,
                   ),
                 ),
@@ -122,15 +126,15 @@ class viewProfileState extends State<viewProfile> {
                     birthDate,
                     style: TextStyle(
                         //color: Color.fromARGB(255, 12, 94, 116),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15.0),
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14.0),
                   ),
                 ),
                 Text(
                   'GENDER',
                   style: TextStyle(
-                    letterSpacing: 3.0,
-                    fontSize: 22,
+                    letterSpacing: 2.0,
+                    fontSize: 18,
                     fontWeight: FontWeight.w900,
                   ),
                 ),
@@ -140,15 +144,15 @@ class viewProfileState extends State<viewProfile> {
                     gender.toUpperCase(),
                     style: TextStyle(
                         //color: Color.fromARGB(255, 12, 94, 116),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15.0),
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14.0),
                   ),
                 ),
                 Text(
                   'ADDRESS',
                   style: TextStyle(
-                    letterSpacing: 3.0,
-                    fontSize: 22,
+                    letterSpacing: 2.0,
+                    fontSize: 18,
                     fontWeight: FontWeight.w900,
                   ),
                 ),
@@ -158,19 +162,19 @@ class viewProfileState extends State<viewProfile> {
                     address.toUpperCase(),
                     style: TextStyle(
                         //color: Color.fromARGB(255, 12, 94, 116),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15.0),
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14.0),
                   ),
                 ),
               ]),
             ),
             SizedBox(
-              height: 50,
-              width: 200,
+              height: 40,
+              width: 150,
               child: TextButton(
                   style: ButtonStyle(
                     backgroundColor:
-                        MaterialStatePropertyAll<Color>(Colors.white),
+                        MaterialStatePropertyAll<Color>(Colors.white70),
                   ),
                   onPressed: () {
                     Navigator.pop(context);
@@ -178,7 +182,7 @@ class viewProfileState extends State<viewProfile> {
                   child: const Text(
                     'DASHBOARD',
                     style: TextStyle(
-                      letterSpacing: 3.0,
+                      letterSpacing: 2.0,
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
                       color: Colors.black,

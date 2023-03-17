@@ -1500,7 +1500,10 @@ class Sidebar extends StatelessWidget {
                           ))));
             },
           ),
-          Divider(),
+          Divider(
+            height: 1,
+            thickness: 1.5,
+          ),
           ListTile(
             leading: Icon(
               Icons.logout_rounded,
@@ -1514,6 +1517,7 @@ class Sidebar extends StatelessWidget {
             ),
             onTap: () {
               //upon logout, 'login' is set to true, which makes the user go to login upon next app usage
+
               loginData.setBool('login', true);
               Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: ((context) => loginPage())));
@@ -1538,16 +1542,21 @@ class Sidebar extends StatelessWidget {
                         TextButton(
                           child: Text("Log Out"),
                           onPressed: () {
+                            loginData.setBool('login', true);
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
                                     builder: ((context) => loginPage())));
+                            //error in removeRoute when used inside showDialog!
+                            //removes route from Stack to avoid issues
+                            Navigator.removeRoute(
+                                context, ModalRoute.of(context) as PageRoute);
                           },
                         ),
                       ],
                     );
                   });
-              */
+                  */
             },
           ),
         ],

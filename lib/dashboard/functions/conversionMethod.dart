@@ -1,5 +1,4 @@
 //temporary conversion for pollutant sensors and total aqi
-
 //index: ozone(ppm)
 //sensor: 10 - 1000ppb *needs conversion DONE*
 String getOzone(value) {
@@ -27,7 +26,7 @@ String getPM(value) {
   if (value <= 12.0) {
     return 'Good'; //up to 50
   } else if (value >= 12.1 && value <= 35.4) {
-    return 'Poor'; //51-100
+    return 'Fair'; //51-100
   } else if (value >= 35.5 && value <= 55.4) {
     return 'Poor'; //101-150
   } else if (value >= 55.5 && value <= 150.4) {
