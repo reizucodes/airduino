@@ -248,9 +248,7 @@ class mainDashboardState extends State<mainDashboard> {
                                               //color: Colors.blue,
                                               width: double.infinity,
                                               child: Text(
-                                                //temperature value
                                                 '$temp1 ° C',
-                                                //'37° C',
                                                 style: TextStyle(
                                                   fontSize: 18,
                                                   fontWeight: FontWeight.w600,
@@ -261,6 +259,7 @@ class mainDashboardState extends State<mainDashboard> {
                                           ),
                                         ],
                                       ),
+
                                       //TOTAL AQI DATE and TIME
                                       Row(
                                         children: [
@@ -275,7 +274,8 @@ class mainDashboardState extends State<mainDashboard> {
                                               child: Text(
                                                 //convert aqi value into the index range's class
                                                 getAqi(double.parse(
-                                                    dev1['field7'])),
+                                                        dev1['field7']))
+                                                    .toUpperCase(),
                                                 style: TextStyle(
                                                     color: sensorReadings(
                                                         getAqi(double.parse(
@@ -287,163 +287,62 @@ class mainDashboardState extends State<mainDashboard> {
                                             ),
                                             flex: 1,
                                           ),
-                                          /*DATE
                                           Expanded(
                                             child: Container(
-                                              margin:
-                                                  EdgeInsets.only(bottom: 5.0),
-                                              height: 30,
-                                              alignment: Alignment.centerRight,
-                                              //color: Colors.blue,
-                                              width: double.infinity,
-                                              child: Text(
-                                                //date value
-                                                dev1_date,
-                                                style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w600,
-                                                  letterSpacing: 1.5,
-                                                ),
-                                              ),
-                                            ),
-                                            flex: 1,
-                                          ),
-                                          */
-                                          Expanded(
-                                            child: Container(
-                                              margin:
-                                                  EdgeInsets.only(bottom: 5.0),
-                                              height: 30,
-                                              alignment: Alignment.centerRight,
-                                              //color: Colors.blue,
-                                              width: double.infinity,
-                                              child: Text(
-                                                //time value
-                                                'As of $dev1_time',
-                                                style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w600,
-                                                  letterSpacing: 1.5,
-                                                ),
-                                              ),
-                                            ),
-                                            flex: 1,
-                                          ),
-                                        ],
-                                      ),
-
-                                      /*
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: Container(
-                                              margin:
-                                                  EdgeInsets.only(bottom: 5.0),
-                                              height: 30,
-                                              alignment: Alignment.centerLeft,
-                                              //color: Colors.red,
-                                              width: double.infinity,
-                                              child: Text(
-                                                'General Public',
-                                                style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w400,
-                                                    letterSpacing: 1.0),
-                                              ),
-                                            ),
-                                            flex: 1,
-                                          ),
-                                          Expanded(
-                                            child: Container(
-                                              margin:
-                                                  EdgeInsets.only(bottom: 5.0),
-                                              height: 50,
-                                              alignment: Alignment.centerRight,
-                                              width: double.infinity,
-                                              child: FittedBox(
-                                                fit: BoxFit.contain,
-                                                alignment: Alignment.centerLeft,
-                                                child: Text(
-                                                  //recommended action based on total AQI
-                                                  //function call recommendedAction(genPub, totalAQI) => returns a String(recommended action)
-                                                  recommendAction(
-                                                      'General Public',
-                                                      getAqi(double.parse(
-                                                          dev1['field7']))),
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w600,
-                                                    letterSpacing: 1.0,
+                                                margin: EdgeInsets.only(
+                                                    bottom: 5.0),
+                                                height: 30,
+                                                alignment:
+                                                    Alignment.centerRight,
+                                                //color: Colors.blue,
+                                                width: double.infinity,
+                                                child: Center(
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Container(
+                                                        alignment: Alignment
+                                                            .bottomRight,
+                                                        //color: Colors.red,
+                                                        child: Text(
+                                                          //date value
+                                                          dev1_date,
+                                                          style: TextStyle(
+                                                            fontSize: 12,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            letterSpacing: 1.2,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        alignment:
+                                                            Alignment.topRight,
+                                                        //color: Colors.orange,
+                                                        child: Text(
+                                                          //time value
+                                                          'As of $dev1_time',
+                                                          style: TextStyle(
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            letterSpacing: 1.2,
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
                                                   ),
-                                                ),
-                                              ),
-                                            ),
+                                                )),
                                             flex: 1,
                                           ),
                                         ],
                                       ),
-                                      */
-
-                                      /*
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: Container(
-                                              margin:
-                                                  EdgeInsets.only(bottom: 5.0),
-                                              height: 30,
-                                              alignment: Alignment.centerLeft,
-                                              //color: Colors.red,
-                                              width: double.infinity,
-                                              child: FittedBox(
-                                                fit: BoxFit.contain,
-                                                alignment: Alignment.centerLeft,
-                                                child: Text(
-                                                  status,
-                                                  style: TextStyle(
-                                                      color: statusColor(
-                                                          userModel[
-                                                              'userClass']),
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      letterSpacing: 1.5),
-                                                ),
-                                              ),
-                                            ),
-                                            flex: 1,
-                                          ),
-                                          Expanded(
-                                            child: Container(
-                                              margin:
-                                                  EdgeInsets.only(bottom: 5.0),
-                                              height: 30,
-                                              alignment: Alignment.centerRight,
-                                              width: double.infinity,
-                                              child: FittedBox(
-                                                fit: BoxFit.contain,
-                                                alignment: Alignment.center,
-                                                child: Text(
-                                                  //recommended action based on total AQI
-                                                  //function call recommendedAction(userStatus, totalAQI) => returns a String(recommended action)
-                                                  recommendAction(
-                                                      status,
-                                                      getAqi(double.parse(
-                                                          dev1['field7']))),
-                                                  style: TextStyle(
-                                                    fontSize: 20,
-                                                    fontWeight: FontWeight.w600,
-                                                    letterSpacing: 1.0,
-                                                    //backgroundColor: Colors.red,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            flex: 1,
-                                          ),
-                                        ],
+                                      Divider(
+                                        height: 2,
+                                        thickness: 2,
                                       ),
-                                      */
                                       //Ozone Row
                                       Row(
                                         children: [
@@ -774,7 +673,7 @@ class mainDashboardState extends State<mainDashboard> {
                                         ),
                                       ),
                                       Container(
-                                        margin: EdgeInsets.only(bottom: 5.0),
+                                        //margin: EdgeInsets.only(bottom: 5.0),
                                         //color: Colors.blue,
                                         height: 30,
                                         alignment: Alignment.centerLeft,
@@ -796,14 +695,10 @@ class mainDashboardState extends State<mainDashboard> {
                                           ),
                                         ),
                                       ),
-                                      Divider(
-                                        height: 2,
-                                        thickness: 2,
-                                      ),
                                     ],
                                   )),
                               SizedBox(
-                                height: 20,
+                                height: 15,
                               ),
                               //PROTOYPE II - TERMINAL ROAD 2
                               Container(
@@ -879,7 +774,8 @@ class mainDashboardState extends State<mainDashboard> {
                                               child: Text(
                                                 //convert aqi value into the index range's class
                                                 getAqi(double.parse(
-                                                    dev2['field7'])),
+                                                        dev2['field7']))
+                                                    .toUpperCase(),
                                                 style: TextStyle(
                                                     color: sensorReadings(
                                                         getAqi(double.parse(
@@ -915,137 +811,60 @@ class mainDashboardState extends State<mainDashboard> {
                                           */
                                           Expanded(
                                             child: Container(
-                                              margin:
-                                                  EdgeInsets.only(bottom: 5.0),
-                                              height: 30,
-                                              alignment: Alignment.centerRight,
-                                              //color: Colors.blue,
-                                              width: double.infinity,
-                                              child: Text(
-                                                //time value
-                                                'As of $dev2_time',
-                                                style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w600,
-                                                  letterSpacing: 1.5,
-                                                ),
-                                              ),
-                                            ),
-                                            flex: 1,
-                                          ),
-                                        ],
-                                      ),
-                                      /*
-                                      //Recommmended Actions : General Public DEFAULT
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: Container(
-                                              margin:
-                                                  EdgeInsets.only(bottom: 5.0),
-                                              height: 30,
-                                              alignment: Alignment.centerLeft,
-                                              //color: Colors.red,
-                                              width: double.infinity,
-                                              child: Text(
-                                                'General Public',
-                                                style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w400,
-                                                    letterSpacing: 1.0),
-                                              ),
-                                            ),
-                                            flex: 1,
-                                          ),
-                                          Expanded(
-                                            child: Container(
-                                              margin:
-                                                  EdgeInsets.only(bottom: 5.0),
-                                              height: 50,
-                                              alignment: Alignment.centerRight,
-                                              width: double.infinity,
-                                              child: FittedBox(
-                                                fit: BoxFit.contain,
-                                                alignment: Alignment.centerLeft,
-                                                child: Text(
-                                                  //recommended action based on total AQI
-                                                  //function call recommendedAction(genPub, totalAQI) => returns a String(recommended action)
-                                                  recommendAction(
-                                                      'General Public',
-                                                      getAqi(double.parse(
-                                                          dev2['field7']))),
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w600,
-                                                    letterSpacing: 1.0,
+                                                margin: EdgeInsets.only(
+                                                    bottom: 5.0),
+                                                height: 30,
+                                                alignment:
+                                                    Alignment.centerRight,
+                                                //color: Colors.blue,
+                                                width: double.infinity,
+                                                child: Center(
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Container(
+                                                        alignment: Alignment
+                                                            .bottomRight,
+                                                        //color: Colors.red,
+                                                        child: Text(
+                                                          //date value
+                                                          dev2_date,
+                                                          style: TextStyle(
+                                                            fontSize: 12,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            letterSpacing: 1.2,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        alignment:
+                                                            Alignment.topRight,
+                                                        //color: Colors.orange,
+                                                        child: Text(
+                                                          //time value
+                                                          'As of $dev2_time',
+                                                          style: TextStyle(
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            letterSpacing: 1.2,
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
                                                   ),
-                                                ),
-                                              ),
-                                            ),
+                                                )),
                                             flex: 1,
                                           ),
                                         ],
                                       ),
-                                      //Recommended Action: User's status based
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: Container(
-                                              margin:
-                                                  EdgeInsets.only(bottom: 5.0),
-                                              height: 30,
-                                              alignment: Alignment.centerLeft,
-                                              //color: Colors.red,
-                                              width: double.infinity,
-                                              child: FittedBox(
-                                                fit: BoxFit.contain,
-                                                alignment: Alignment.centerLeft,
-                                                child: Text(
-                                                  status,
-                                                  style: TextStyle(
-                                                      color: statusColor(
-                                                          userModel[
-                                                              'userClass']),
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      letterSpacing: 1.5),
-                                                ),
-                                              ),
-                                            ),
-                                            flex: 1,
-                                          ),
-                                          Expanded(
-                                            child: Container(
-                                              margin:
-                                                  EdgeInsets.only(bottom: 5.0),
-                                              height: 30,
-                                              alignment: Alignment.centerRight,
-                                              width: double.infinity,
-                                              child: FittedBox(
-                                                fit: BoxFit.contain,
-                                                alignment: Alignment.center,
-                                                child: Text(
-                                                  //recommended action based on total AQI
-                                                  //function call recommendedAction(userStatus, totalAQI) => returns a String(recommended action)
-                                                  recommendAction(
-                                                      status,
-                                                      getAqi(double.parse(
-                                                          dev2['field7']))),
-                                                  style: TextStyle(
-                                                    fontSize: 20,
-                                                    fontWeight: FontWeight.w600,
-                                                    letterSpacing: 1.0,
-                                                    //backgroundColor: Colors.red,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            flex: 1,
-                                          ),
-                                        ],
+                                      Divider(
+                                        height: 2,
+                                        thickness: 2,
                                       ),
-                                      */
                                       //Ozone Row
                                       Row(
                                         children: [
@@ -1376,7 +1195,7 @@ class mainDashboardState extends State<mainDashboard> {
                                         ),
                                       ),
                                       Container(
-                                        margin: EdgeInsets.only(bottom: 5.0),
+                                        //margin: EdgeInsets.only(bottom: 5.0),
                                         //color: Colors.blue,
                                         height: 30,
                                         alignment: Alignment.centerLeft,
@@ -1397,10 +1216,6 @@ class mainDashboardState extends State<mainDashboard> {
                                             ),
                                           ),
                                         ),
-                                      ),
-                                      Divider(
-                                        height: 2,
-                                        thickness: 2,
                                       ),
                                     ],
                                   )),
