@@ -1,4 +1,6 @@
 // ignore_for_file: camel_case_types, prefer_const_constructors, prefer_const_constructors_in_immutables, use_key_in_widget_constructors, prefer_final_fields, use_build_context_synchronously, no_logic_in_create_state, must_be_immutable, sort_child_properties_last, prefer_adjacent_string_concatenation, prefer_typing_uninitialized_variables, unused_local_variable, prefer_const_declarations, avoid_print, non_constant_identifier_names
+import 'package:airduino/dashboard/profile/moreInfo.dart';
+
 import '../auth/loginPage.dart';
 import 'functions/getStatus.dart';
 import './profile/changePass.dart';
@@ -48,6 +50,41 @@ class mainDashboardState extends State<mainDashboard> {
   String dev2_time = '';
   var temp1;
   var temp2;
+
+  String month(int date) {
+    List month = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
+    return month[date - 1];
+  }
+
+  int hour(int data) {
+    if (data == 0) {
+      return 12;
+    } else if (data > 12) {
+      return data - 12;
+    } else
+      return data;
+  }
+
+  String period(int hour) {
+    if (hour > 12) {
+      return 'PM';
+    } else
+      return 'AM';
+  }
+
   //fetch and return latest data from device database
   //prototype I and II data latest reading fetch
   Future<void> _refreshBody() async {
@@ -77,20 +114,21 @@ class mainDashboardState extends State<mainDashboard> {
       DateTime dateTimeGmt8_dev1 = dateTimeLocal_dev1;
       print(dateTimeLocal_dev1);
       dev1_date =
-          "${dateTimeGmt8_dev1.month}-${dateTimeGmt8_dev1.day}-${dateTimeGmt8_dev1.year}";
+          "${month(dateTimeGmt8_dev1.month)} ${dateTimeGmt8_dev1.day}, ${dateTimeGmt8_dev1.year}";
       dev1_time =
-          "${dateTimeGmt8_dev1.hour}:${dateTimeGmt8_dev1.minute.toString().padLeft(2, '0')}";
+          "${hour(dateTimeGmt8_dev1.hour)}:${dateTimeGmt8_dev1.minute.toString().padLeft(2, '0')} ${period(dateTimeGmt8_dev1.hour)}";
       dev2 = pd02;
       timestamp2 = dev2['created_at'];
       DateTime dateTime_dev2 = DateTime.parse(timestamp2);
       DateTime dateTimeLocal_dev2 = dateTime_dev2.toLocal();
       //DateTime dateTimeGmt8 = dateTimeLocal.add(Duration(hours: 8));
       DateTime dateTimeGmt8_dev2 = dateTimeLocal_dev2;
+      //dateTimeGmt8_dev2.hour
       print(dateTimeLocal_dev2);
       dev2_date =
-          "${dateTimeGmt8_dev2.month}-${dateTimeGmt8_dev2.day}-${dateTimeGmt8_dev2.year}";
+          "${month(dateTimeGmt8_dev2.month)} ${dateTimeGmt8_dev2.day}, ${dateTimeGmt8_dev2.year}";
       dev2_time =
-          "${dateTimeGmt8_dev2.hour}:${dateTimeGmt8_dev2.minute.toString().padLeft(2, '0')}";
+          "${hour(dateTimeGmt8_dev2.hour)}:${dateTimeGmt8_dev2.minute.toString().padLeft(2, '0')} ${period(dateTimeGmt8_dev2.hour)}";
       //temperature values
       temp1 = double.parse(dev1['field1']);
       temp1 = double.parse(temp1.toStringAsFixed(1));
@@ -207,7 +245,7 @@ class mainDashboardState extends State<mainDashboard> {
                                   //height: 400,
                                   //width: 200,
                                   decoration: BoxDecoration(
-                                    color: Colors.white70,
+                                    color: Colors.white,
                                     borderRadius: BorderRadius.circular(15.0),
                                     boxShadow: [
                                       BoxShadow(
@@ -325,7 +363,7 @@ class mainDashboardState extends State<mainDashboard> {
                                                           //time value
                                                           'As of $dev1_time',
                                                           style: TextStyle(
-                                                            fontSize: 14,
+                                                            fontSize: 12,
                                                             fontWeight:
                                                                 FontWeight.w500,
                                                             letterSpacing: 1.2,
@@ -340,8 +378,9 @@ class mainDashboardState extends State<mainDashboard> {
                                         ],
                                       ),
                                       Divider(
-                                        height: 2,
-                                        thickness: 2,
+                                        color: Colors.black54,
+                                        height: 1,
+                                        thickness: 1,
                                       ),
                                       //Ozone Row
                                       Row(
@@ -609,8 +648,9 @@ class mainDashboardState extends State<mainDashboard> {
                                         ],
                                       ),
                                       Divider(
-                                        height: 2,
-                                        thickness: 2,
+                                        color: Colors.black54,
+                                        height: 1,
+                                        thickness: 1,
                                       ),
                                       //Recommmended Actions : General Public DEFAULT
                                       Container(
@@ -644,7 +684,7 @@ class mainDashboardState extends State<mainDashboard> {
                                                 getAqi(double.parse(
                                                     dev1['field7']))),
                                             style: TextStyle(
-                                              fontSize: 12,
+                                              fontSize: 13,
                                               fontWeight: FontWeight.w400,
                                               letterSpacing: 1.0,
                                             ),
@@ -653,25 +693,40 @@ class mainDashboardState extends State<mainDashboard> {
                                       ),
                                       //Recommended Action: User's status based
                                       Container(
-                                        //margin: EdgeInsets.only(bottom: 5.0),
-                                        height: 30,
-                                        alignment: Alignment.centerLeft,
-                                        //color: Colors.red,
-                                        width: double.infinity,
-                                        child: FittedBox(
-                                          fit: BoxFit.contain,
+                                          //margin: EdgeInsets.only(bottom: 5.0),
+                                          height: 30,
                                           alignment: Alignment.centerLeft,
-                                          child: Text(
-                                            status,
-                                            style: TextStyle(
-                                                color: statusColor(
-                                                    userModel['userClass']),
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w500,
-                                                letterSpacing: 1.0),
-                                          ),
-                                        ),
-                                      ),
+                                          //color: Colors.red,
+                                          width: double.infinity,
+                                          child: Row(
+                                            children: [
+                                              FittedBox(
+                                                child: Text(
+                                                  'User Status: ',
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w500,
+                                                    letterSpacing: 1.0,
+                                                  ),
+                                                ),
+                                              ),
+                                              FittedBox(
+                                                fit: BoxFit.contain,
+                                                alignment: Alignment.centerLeft,
+                                                child: Text(
+                                                  status,
+                                                  style: TextStyle(
+                                                      color: statusColor(
+                                                          userModel[
+                                                              'userClass']),
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      letterSpacing: 1.0),
+                                                ),
+                                              ),
+                                            ],
+                                          )),
                                       Container(
                                         //margin: EdgeInsets.only(bottom: 5.0),
                                         //color: Colors.blue,
@@ -688,7 +743,7 @@ class mainDashboardState extends State<mainDashboard> {
                                                 getAqi(double.parse(
                                                     dev1['field7']))),
                                             style: TextStyle(
-                                              fontSize: 12,
+                                              fontSize: 13,
                                               fontWeight: FontWeight.w400,
                                               letterSpacing: 1.0,
                                             ),
@@ -706,7 +761,7 @@ class mainDashboardState extends State<mainDashboard> {
                                   //height: 400,
                                   //width: 200,
                                   decoration: BoxDecoration(
-                                    color: Colors.white70,
+                                    color: Colors.white,
                                     borderRadius: BorderRadius.circular(15.0),
                                     boxShadow: [
                                       BoxShadow(
@@ -847,7 +902,7 @@ class mainDashboardState extends State<mainDashboard> {
                                                           //time value
                                                           'As of $dev2_time',
                                                           style: TextStyle(
-                                                            fontSize: 14,
+                                                            fontSize: 12,
                                                             fontWeight:
                                                                 FontWeight.w500,
                                                             letterSpacing: 1.2,
@@ -862,8 +917,9 @@ class mainDashboardState extends State<mainDashboard> {
                                         ],
                                       ),
                                       Divider(
-                                        height: 2,
-                                        thickness: 2,
+                                        color: Colors.black54,
+                                        height: 1,
+                                        thickness: 1,
                                       ),
                                       //Ozone Row
                                       Row(
@@ -1131,8 +1187,9 @@ class mainDashboardState extends State<mainDashboard> {
                                         ],
                                       ),
                                       Divider(
-                                        height: 2,
-                                        thickness: 2,
+                                        color: Colors.black54,
+                                        height: 1,
+                                        thickness: 1,
                                       ),
                                       //Recommmended Actions : General Public DEFAULT
                                       Container(
@@ -1166,7 +1223,7 @@ class mainDashboardState extends State<mainDashboard> {
                                                 getAqi(double.parse(
                                                     dev2['field7']))),
                                             style: TextStyle(
-                                              fontSize: 12,
+                                              fontSize: 13,
                                               fontWeight: FontWeight.w400,
                                               letterSpacing: 1.0,
                                             ),
@@ -1175,25 +1232,40 @@ class mainDashboardState extends State<mainDashboard> {
                                       ),
                                       //Recommended Action: User's status based
                                       Container(
-                                        //margin: EdgeInsets.only(bottom: 5.0),
-                                        height: 30,
-                                        alignment: Alignment.centerLeft,
-                                        //color: Colors.red,
-                                        width: double.infinity,
-                                        child: FittedBox(
-                                          fit: BoxFit.contain,
+                                          //margin: EdgeInsets.only(bottom: 5.0),
+                                          height: 30,
                                           alignment: Alignment.centerLeft,
-                                          child: Text(
-                                            status,
-                                            style: TextStyle(
-                                                color: statusColor(
-                                                    userModel['userClass']),
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w500,
-                                                letterSpacing: 1.0),
-                                          ),
-                                        ),
-                                      ),
+                                          //color: Colors.red,
+                                          width: double.infinity,
+                                          child: Row(
+                                            children: [
+                                              FittedBox(
+                                                child: Text(
+                                                  'User Status: ',
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w500,
+                                                    letterSpacing: 1.0,
+                                                  ),
+                                                ),
+                                              ),
+                                              FittedBox(
+                                                fit: BoxFit.contain,
+                                                alignment: Alignment.centerLeft,
+                                                child: Text(
+                                                  status,
+                                                  style: TextStyle(
+                                                      color: statusColor(
+                                                          userModel[
+                                                              'userClass']),
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      letterSpacing: 1.0),
+                                                ),
+                                              ),
+                                            ],
+                                          )),
                                       Container(
                                         //margin: EdgeInsets.only(bottom: 5.0),
                                         //color: Colors.blue,
@@ -1210,7 +1282,7 @@ class mainDashboardState extends State<mainDashboard> {
                                                 getAqi(double.parse(
                                                     dev2['field7']))),
                                             style: TextStyle(
-                                              fontSize: 12,
+                                              fontSize: 13,
                                               fontWeight: FontWeight.w400,
                                               letterSpacing: 1.0,
                                             ),
@@ -1315,9 +1387,28 @@ class Sidebar extends StatelessWidget {
                           ))));
             },
           ),
+          ListTile(
+            leading: Icon(
+              Icons.info,
+              color: Colors.white,
+            ),
+            title: Text(
+              "More Information",
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+            onTap: () {
+              //print('World');
+              // Add your code here to handle the item press
+              Navigator.push(context,
+                  MaterialPageRoute(builder: ((context) => moreInfo())));
+            },
+          ),
           Divider(
+            color: Colors.black54,
             height: 1,
-            thickness: 1.5,
+            thickness: 1,
           ),
           ListTile(
             leading: Icon(
