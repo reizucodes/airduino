@@ -79,7 +79,7 @@ class mainDashboardState extends State<mainDashboard> {
   }
 
   String period(int hour) {
-    if (hour > 12) {
+    if (hour >= 12) {
       return 'PM';
     } else
       return 'AM';
